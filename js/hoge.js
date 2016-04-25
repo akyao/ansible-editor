@@ -67,27 +67,27 @@ electron.ipcRenderer.on('ping', function(event, message) {
   var template = $(".trTemplate");
   var tbody = $(".tbody");
 
-  // function render(fileList) {
-  //
-  // }
+    // 表示する
+  function render(fileList) {
+    for (var i = 0; i < fileList.length; i++) {
+      var ansFile = fileList[i];
+      var newTr = template.clone(true);
+      $("td:first div", newTr).addClass("depth-" + ansFile.depth);
+      if (ansFile.isDir()) {
+        $("td:first i", newTr).addClass("fa-folder-o");
+      } else {
+        $("td:first i", newTr).addClass("fa-file-code-o");
+      }
+      newTr.appendTo(tbody);
 
-  // 表示する
-  for (var i = 0; i < fileList.length; i++) {
-    var ansFile = fileList[i];
-    var newTr = template.clone(true);
-    $("td:first div", newTr).addClass("depth-" + ansFile.depth);
-    if (ansFile.isDir()) {
-      $("td:first i", newTr).addClass("fa-folder-o");
-    } else {
-      $("td:first i", newTr).addClass("fa-file-code-o");
-    }
-    newTr.appendTo(tbody);
-
-    $(".fileName", newTr).append(ansFile.depth + ansFile.fileName)
-    newTr.show();
-    if (ansFile.hasChild()) {
-      // TODO 再帰
-      console.log(ansFile.children);
+      $(".fileName", newTr).append(ansFile.fileName)
+      newTr.show();
+      if (ansFile.hasChild()) {
+        // 再帰
+        render(ansFile.children);
+      }
     }
   }
+
+  render(fileList);
 });
