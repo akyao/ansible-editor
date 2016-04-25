@@ -5,7 +5,8 @@
 #
 
 ```bash
+npm install
 bower insgtall
-grunt serve
+grunt
 electron .
 ```
