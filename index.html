@@ -8,11 +8,7 @@
 <link rel="stylesheet" type="text/css" href="build/style.css">
 <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="js/hoge.js"></script>
-<script type="text/javascript">
-function aaa() {
 
-}
-</script>
 </head>
 
 <body>
@@ -21,7 +17,17 @@ function aaa() {
     <th class="path">File</th>
     <th class="content">Content</th>
   </thead>
-  <tbody>
+  <tbody class="tbody">
+    <tr class="trTemplate" style="display:none">
+      <td>
+        <div class="depth-1">
+          <i class="fa fa-file-code-o" aria-hidden="true"></i>
+          <span class="fileName">
+        </div>
+      </td>
+      <td>aaa</td>
+    </tr>
+    <!--
     <tr class="">
       <td><div class="depth-0"><i class="fa fa-folder" aria-hidden="true"></i>group_vars</div></td>
       <td>aaa</td>
@@ -41,6 +47,7 @@ function aaa() {
   aaa</div></td>
       <td>aaa</td>
     </tr>
+  -->
   </tbody>
 </table>
 </body>
