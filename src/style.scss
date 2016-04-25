@@ -1,6 +1,10 @@
 $fa-font-path:  "../bower_components/font-awesome/fonts";
 @import "../bower_components/font-awesome/scss/font-awesome";
 
+.path{
+  width:250px;
+}
+
 @for $i from 0 through 10 {
   .depth-#{$i} {
     padding-left: 1em * $i;

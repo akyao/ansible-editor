@@ -1,7 +1,7 @@
 {
-  "name": "electron-test",
+  "name": "AnsibleEditor",
   "description": "",
-  "main": "index.js",
+  "main": "js/main.js",
   "authors": [
     "akyao <konama.akyao@gmail.com>"
   ],

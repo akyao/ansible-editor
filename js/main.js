@@ -23,9 +23,6 @@ app.on('ready', function() {
 
   installMenu();
 
-  var f = require('./fuck.js');
-  console.log (f.fuck());
-
   mainWindow.on('closed', function() {
     mainWindow = null;
   });
