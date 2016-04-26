@@ -25,19 +25,19 @@ class AnsFile {
     return this._depth;
   }
   fileType() {
-    var fileType = null;
+
     if (this._parent != null) {
-      fileType = this._parent.fileType();
+      return this._parent.fileType();
     }
-    if (fileType == null) {
-      if ( "roles" == this._fileName) {
-        return "role";
-      }
-      "host", "yml"
-    } else {
-      return "other";
+
+    if ("roles" == this._fileName) {
+      return "roles";
+    } else if (this.isDir() && this.fileName.endsWith("vars")) {
+      return "vars";
     }
-    return fileType;
+    // TODO host判定
+
+    return "others";
   }
   add(child) {
     if (Array.isArray(child)) {
@@ -74,9 +74,23 @@ electron.ipcRenderer.on('ping', function(event, message) {
   var targetDir = 'benchmarks/wordpress-nginx';
   var fileList = load(targetDir, null, 0);
 
-  // TODO sort
+  // sort
+  // host -> yml -> vars -> roles -> othersの順
+  var order = ["hosts", "yml", "vars", "roles", "others"];
+  fileList.sort(function(a, b) {
+    var aIndex = order.indexOf(a.fileType());
+    var bIndex = order.indexOf(b.fileType());
+
+    if (aIndex != bIndex) {
+      console.log("sort");
+      return aIndex - bIndex;
+    }
+    // 同じ種類の場合はabc順
+    return a.fileType().localeCompare(b.fileType());
+  });
 
   // サブフォルダの中ではmain.ymlが先頭
+
   // 表示を初期化
   $(".tbody tr:visible").remove();
 
@@ -84,7 +98,7 @@ electron.ipcRenderer.on('ping', function(event, message) {
   var template = $(".trTemplate");
   var tbody = $(".tbody");
 
-    // 表示する
+  // 表示する
   function render(fileList) {
     for (var i = 0; i < fileList.length; i++) {
       var ansFile = fileList[i];
@@ -95,12 +109,19 @@ electron.ipcRenderer.on('ping', function(event, message) {
       } else {
         $("td:first i", newTr).addClass("fa-file-code-o");
       }
+      newTr.addClass("ftype-" + ansFile.fileType());
       newTr.appendTo(tbody);
 
-      $(".fileName", newTr).append(ansFile.fileName + ":" + ansFile.fileType());
+      $(".fileName", newTr).append(ansFile.fileName);
       newTr.show();
       if (ansFile.hasChild()) {
+        // dir 中のファイルを走査
         render(ansFile.children);
+      } else {
+        // file コンテンツを表示
+        fs.readFile(ansFile.filePath, "utf8", function(err, data) {
+          $(".fileContents", newTr).append("<pre>" + data + "</pre>");
+        });
       }
     }
   }
