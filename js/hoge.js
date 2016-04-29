@@ -113,15 +113,20 @@ electron.ipcRenderer.on('ping', function(event, message) {
       newTr.appendTo(tbody);
 
       $(".fileName", newTr).append(ansFile.fileName);
-      newTr.show();
+
       if (ansFile.hasChild()) {
         // dir 中のファイルを走査
+        newTr.show();
         render(ansFile.children);
       } else {
-        // file コンテンツを表示
-        fs.readFile(ansFile.filePath, "utf8", function(err, data) {
-          $(".fileContents", newTr).append("<pre>" + data + "</pre>");
-        });
+        (function(newTr) {
+          // file コンテンツを表示
+          fs.readFile(ansFile.filePath, "utf8", function(err, data) {
+            $(".fileContents", newTr)
+              .append("<textarea cols='100' rows='4'>" + data + "</textarea>");
+          });
+          newTr.show();
+        })(newTr);
       }
     }
   }
